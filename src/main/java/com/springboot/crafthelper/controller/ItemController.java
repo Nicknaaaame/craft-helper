@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/item")
-public class CraftController {
+public class ItemController {
     @Autowired
     @Qualifier("mockItemServiceImpl")
     private ItemService itemService;
