@@ -5,7 +5,7 @@
             {{ item.name }}
         </v-card-text>
         <v-card-actions>
-            <v-btn @click="" small flat round>Show</v-btn>
+            <v-btn @click="">open</v-btn>
         </v-card-actions>
     </v-card>
 </template>

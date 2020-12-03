@@ -1,5 +1,6 @@
 package com.springboot.crafthelper.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,17 +11,18 @@ import java.util.Map;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 
-    @ElementCollection
-    private Map<Item, Integer> craftRecipe = new HashMap<>();
-
     @Lob
     private byte[] icon;
+
+    @ElementCollection
+    private Map<Item, Integer> craftRecipe = new HashMap<>();
 
     public Item(Long id, String name) {
         this.id = id;

@@ -1,17 +1,21 @@
 package com.springboot.crafthelper.controller;
 
+import com.springboot.crafthelper.controller.dto.ItemDto;
 import com.springboot.crafthelper.domain.Item;
 import com.springboot.crafthelper.exception.ItemNotFoundException;
 import com.springboot.crafthelper.service.ItemService;
+import com.sun.istack.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/item")
@@ -19,6 +23,25 @@ public class ItemController {
     @Autowired
     @Qualifier("mockItemServiceImpl")
     private ItemService itemService;
+
+    @PostMapping
+    public ResponseEntity<HttpStatus> postItem(@NotNull @RequestBody ItemDto itemDto) {
+        Map<Item, Integer> craftRecipe = new HashMap<>();
+        itemDto.getCraftRecipe().forEach(recipeEntry -> {
+            Item item = itemService.getItemById(recipeEntry.getId())
+                    .orElseThrow(() -> new ItemNotFoundException("Recipe has nonexistent item with id: " + recipeEntry.getId()));
+            craftRecipe.put(item, recipeEntry.getAmount());
+        });
+
+        Item item = new Item(
+                itemDto.getId(),
+                itemDto.getName(),
+                itemDto.getIcon(),
+                craftRecipe);
+        itemService.saveItem(item);
+        System.out.println(item);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity<List<Item>> getItemsByName(@RequestParam(required = false, defaultValue = "") String name) {

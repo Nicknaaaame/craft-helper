@@ -4,8 +4,7 @@ import com.springboot.crafthelper.domain.Item;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
-
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.Map;
 
 class MockItemServiceImplTest {
     ItemService itemService = new MockItemServiceImpl();
@@ -36,5 +35,14 @@ class MockItemServiceImplTest {
     void getFullRecipe() {
         var fullRecipe = itemService.getFullRecipe(itemService.getItemById(6L).get());
         System.out.println(fullRecipe);
+
     }
+}
+class ItemDto{
+    private Long id;
+    private String name;
+    private byte[] icon;
+    //AbstractMap.SimpleEntry<String, Integer>
+//    private List<CraftRecipeEntry> craftRecipe;// = new HashMap<>();
+    private Map<ItemDto, Integer> craftRecipe;
 }

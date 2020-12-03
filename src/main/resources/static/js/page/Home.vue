@@ -1,20 +1,26 @@
 <template>
     <v-app>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
-        <h1>12312</h1>
+        <v-container>
+            <item-list :items="items"></item-list>
+        </v-container>
     </v-app>
 </template>
 
 <script>
+    import ItemList from "component/item/ItemList";
+    import api from "../backend-api";
 
+    export default {
+        components: {ItemList},
+        data() {
+            return {
+                items: null
+            }
+        },
+        mounted() {
+            api.getAllItems().then(response => this.items = response.data)
+        },
+    }
 </script>
 
 <style>
