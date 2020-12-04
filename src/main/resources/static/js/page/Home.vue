@@ -1,7 +1,12 @@
 <template>
     <v-app>
         <v-container>
-            <item-list :items="items"></item-list>
+            <v-text-field
+                    label="Find item"
+                    v-model="searchName"
+                    @change="findItem"
+            ></v-text-field>
+            <item-list :items="foundedItems"></item-list>
         </v-container>
     </v-app>
 </template>
@@ -14,11 +19,29 @@
         components: {ItemList},
         data() {
             return {
-                items: null
+                items: null,
+                foundedItems:null,
+                searchName:""
+            }
+        },
+        methods: {
+            findItem() {
+                console.log(this.foundedItems)
+                if(this.searchName!==""){
+                    this.foundedItems = []
+                    this.items.forEach(item=>{
+                        if(item.name.toLowerCase().includes(this.searchName.toLowerCase()))
+                            this.foundedItems.push(item)
+                    })
+                } else
+                    this.foundedItems = this.items
             }
         },
         mounted() {
-            api.getAllItems().then(response => this.items = response.data)
+            api.getAllItems().then(response => {
+                this.items = response.data
+                this.foundedItems = this.items
+            })
         },
     }
 </script>

@@ -2,12 +2,15 @@ import Vue from 'vue'
 import Router from "vue-router"
 import ItemForm from "component/item/ItemForm.vue"
 import Home from "page/Home"
+import ItemPage from "./page/ItemPage";
+import AddItemPage from "./page/AddItemPage";
 
 Vue.use(Router)
 
 const routers = [
     {path: '/', component: Home},
-    {path: '/itemform', component: ItemForm},
+    {path: '/additem', component: AddItemPage},
+    {path: '/item/:id', component: ItemPage},
     {path: '*', redirect: '/'}
 ]
 

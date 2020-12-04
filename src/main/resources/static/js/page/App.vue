@@ -29,10 +29,10 @@
         name: "App",
         data() {
             return {
-                appTitle: 'Awesome App',
+                appTitle: 'Craft helper',
                 menuItems: [
                     {title: 'Home', path: '/', icon: 'home'},
-                    {title: 'Item', path: '/itemform', icon: 'face'},
+                    {title: 'Add item', path: '/additem', icon: 'face'},
                     // {title: 'Sign Up', path: '/signup', icon: 'face'},
                     // {title: 'Sign In', path: '/signin', icon: 'lock_open'}
                 ]

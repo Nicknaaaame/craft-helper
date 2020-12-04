@@ -2,13 +2,12 @@ import axios from 'axios'
 import itemUtil from "util/item"
 
 const AXIOS = axios.create({
-    baseURL: `/item`,
+    baseURL: `/api/item`,
     timeout: 1000
 });
 
 
 export default {
-
     getAllItems() {
         return AXIOS.get(`/`)
     },
@@ -18,9 +17,12 @@ export default {
         }
         return AXIOS.get(`/`, {params})
     },
+    getRecipeById(id) {
+        return AXIOS.get('/recipe/' + id)
+    },
     addItem(name, icon, recipe) {
         return AXIOS.post('/', itemUtil.getItemWith(name, icon, recipe));
-    }
+    },
 }
 
 

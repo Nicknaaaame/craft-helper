@@ -13,7 +13,7 @@
                         accept="image/*"
                         label="Icon input"
                 ></v-file-input>
-                <v-card v-for="entry in recipe" :key="entry.item.id">
+                <v-card v-for="entry in recipe" :key="entry.item.id" class="my-2">
                     <v-card-text>
                         {{entry.item.name}}
                     </v-card-text>
@@ -47,21 +47,22 @@
 
     export default {
         components: {ItemList},
+        props: ["items"],
         data() {
             return {
                 name: "",
                 icon: null,
                 recipe: [],
-                items: [],
             }
         },
         methods: {
             submit() {
                 let resultRecipe = []
-                this.recipe.forEach(entry=>{
+                this.recipe.forEach(entry => {
                     resultRecipe.push(itemUtil.getRecipeEntryWith(entry.item.id, entry.amount))
                 })
                 api.addItem(this.name, this.icon, resultRecipe)
+                window.location.reload()
             },
             addItem(_item) {
                 let index = this.items.indexOf(_item)
@@ -69,14 +70,7 @@
                 this.recipe.push({item: _item, amount: 1})
             }
         },
-        mounted() {
-            api.getAllItems().then(response => this.items = response.data)
-            // api.getAllItems().then(response => {
-            //     response.data.forEach(entry=>{
-            //         this.items.push({item: entry, amount: 1})
-            //     })
-            // })
-        }
+
     }
 </script>
 

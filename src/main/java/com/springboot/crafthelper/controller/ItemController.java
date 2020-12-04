@@ -1,5 +1,6 @@
 package com.springboot.crafthelper.controller;
 
+import com.springboot.crafthelper.controller.dto.ItemAmountEntry;
 import com.springboot.crafthelper.controller.dto.ItemDto;
 import com.springboot.crafthelper.domain.Item;
 import com.springboot.crafthelper.exception.ItemNotFoundException;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 
 @RestController
-@RequestMapping("/item")
+@RequestMapping("/api/item")
 public class ItemController {
     @Autowired
     @Qualifier("mockItemServiceImpl")
@@ -57,9 +58,11 @@ public class ItemController {
     }
 
     @GetMapping("/recipe/{id}")
-    public ResponseEntity<Map<Item, Integer>> getCraftRecipe(@PathVariable Long id) {
+    public ResponseEntity<List<ItemAmountEntry>> getCraftRecipe(@PathVariable Long id) {
         Item item = getItemById(id).getBody();
-        return new ResponseEntity<>(item.getCraftRecipe(), HttpStatus.OK);
+        return new ResponseEntity<>(item.getCraftRecipe().entrySet().stream().map(
+                entry -> new ItemAmountEntry(entry.getKey(), entry.getValue())).collect(Collectors.toList()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/fullrecipe/{id}")
