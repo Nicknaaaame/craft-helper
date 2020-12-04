@@ -26,7 +26,7 @@
                 <v-btn @click="submit">submit</v-btn>
             </v-container>
             <v-container>
-                <v-card v-for="item in items" :key="item.id" class="my-2">
+                <!--<v-card v-for="item in items" :key="item.id" class="my-2">
                     <v-card-text primary-title>
                         {{ item.icon }}
                         {{ item.name }}
@@ -34,7 +34,13 @@
                     <v-card-actions>
                         <v-btn @click="addItem(item)">add</v-btn>
                     </v-card-actions>
-                </v-card>
+                </v-card>-->
+                <item-list :items="items">
+                    <template v-slot:text>{{}}</template>
+                    <template v-slot:btn>
+                        <v-btn>add</v-btn>
+                    </template>
+                </item-list>
             </v-container>
         </v-form>
     </v-app>
