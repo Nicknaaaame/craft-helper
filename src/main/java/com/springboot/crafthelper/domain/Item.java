@@ -22,6 +22,7 @@ public class Item {
     private byte[] icon;
 
     @ElementCollection
+//    @JsonSerialize(using = CraftRecipeSerializer.class)
     private Map<Item, Integer> craftRecipe = new HashMap<>();
 
     public Item(Long id, String name) {
