@@ -15,7 +15,7 @@
     export default {
         props: ["entry"],
         mounted() {
-            console.log(this.entry)
+            // console.log(this.entry)
         }
     }
 </script>

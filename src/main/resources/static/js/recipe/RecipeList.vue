@@ -1,12 +1,12 @@
 <template>
     <v-container>
-        <div v-if="recipe.length===0">
+        <div v-if="item.craftRecipe.length===0">
             <h1>This item has no craft recipe</h1>
         </div>
         <div v-else>
             <h1>Here's craft recipe</h1>
             <div>
-                <recipe-row v-for="entry in recipe" :entry="entry" :key="entry.item.id"></recipe-row>
+                <recipe-row v-for="entry in item.craftRecipe" :entry="entry" :key="entry.item.id"></recipe-row>
             </div>
         </div>
     </v-container>
@@ -16,7 +16,10 @@
     import RecipeRow from "./RecipeRow";
 
     export default {
-        props: ["recipe"],
+        props: ["item"],
         components: {RecipeRow, ItemRow},
+        mounted() {
+            console.log(this.item)
+        }
     }
 </script>

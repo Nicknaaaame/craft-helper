@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from "vue-router"
 import ItemForm from "component/item/ItemForm.vue"
 import Home from "page/Home"
-import ItemPage from "./page/ItemPage";
+import ItemPage from "./page/OpenItemPage";
 import AddItemPage from "./page/AddItemPage";
 
 Vue.use(Router)

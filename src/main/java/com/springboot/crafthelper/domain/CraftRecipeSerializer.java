@@ -13,8 +13,8 @@ public class CraftRecipeSerializer extends JsonSerializer<Map<Item, Integer>> {
         gen.writeStartArray();
         for (Map.Entry<Item, Integer> entry : value.entrySet()) {
             gen.writeStartObject();
-            gen.writeObjectField("key", entry.getKey());
-            gen.writeNumberField("value", entry.getValue());
+            gen.writeObjectField("item", entry.getKey());
+            gen.writeNumberField("amount", entry.getValue());
             gen.writeEndObject();
         }
         gen.writeEndArray();

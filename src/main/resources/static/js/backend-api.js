@@ -11,6 +11,9 @@ export default {
     getAllItems() {
         return AXIOS.get(`/`)
     },
+    getItemById(id) {
+        return AXIOS.get('/' + id)
+    },
     getItemsWithName(name) {
         const params = {
             "name": name
