@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueResource from 'vue-resource'
+import "@babel/polyfill"
 import App from 'page/App.vue'
 import Vuetify from "vuetify"
 import router from "./router"

@@ -6,7 +6,9 @@
         <div v-else>
             <h1>Here's craft recipe</h1>
             <div>
-                <recipe-row v-for="entry in item.craftRecipe" :entry="entry" :key="entry.item.id"></recipe-row>
+                <template>
+                    <recipe-row v-for="entry in item.craftRecipe" :entry="entry" :key="entry.item.id"></recipe-row>
+                </template>
             </div>
         </div>
     </v-container>
@@ -18,8 +20,5 @@
     export default {
         props: ["item"],
         components: {RecipeRow, ItemRow},
-        mounted() {
-            console.log(this.item)
-        }
     }
 </script>
