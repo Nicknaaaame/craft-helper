@@ -1,5 +1,6 @@
 package com.springboot.crafthelper.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +23,7 @@ public class Item {
     private byte[] icon;
 
     @ElementCollection
-//    @JsonSerialize(using = CraftRecipeSerializer.class)
+    @JsonSerialize(using = CraftRecipeSerializer.class)
     private Map<Item, Integer> craftRecipe = new HashMap<>();
 
     public Item(Long id, String name) {

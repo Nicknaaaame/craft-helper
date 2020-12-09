@@ -17,7 +17,7 @@
 <script>
     export default {
         name: "recipeRow",
-        props: ["entry", "resultAmount", 'parentTree', 'parentRow', 'parentIndex'],
+        props: ["entry", "resultAmount", 'parentAmount', 'parentData'],
         data() {
             return {
                 currAmount: 0,
@@ -32,14 +32,16 @@
             'parent.$data.currAmount'(){
                 let tree = this.parent.$parent.$parent.$parent.$parent
                 if(this.parent.$props.amount!==0)
-                    this.currAmount = (this.resultAmount / this.parentTree.amount) * this.parent.currAmount
+                    this.currAmount = (this.resultAmount / this.parentAmount) * this.parent.currAmount
                 else
                     this.currAmount = 0
                 // console.log(this.parent.currAmount)
             }
         },
         mounted() {
-            console.log(this.parentTree)
+            // console.log(this.parent.$data)
+            // console.log(this.$parent.$parent.$parent.$parent.$parent.$parent.$children[0].$children)
+            console.log(this.parentData)
             // console.log(this.parent.$parent.$parent.$parent.$parent.$props)
             // console.log(this.parent)
             // let par = this.$parent.$parent.$parent.$parent.$parent.$parent

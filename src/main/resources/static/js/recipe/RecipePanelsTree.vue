@@ -3,11 +3,10 @@
         <v-expansion-panel v-if="item" v-for="entry in item.craftRecipe" :entry="entry" :key="entry.item.id"
                            :set="resultAmount = entry.amount * amount">
             <v-expansion-panel-header>
-                <recipe-row :entry="entry" :resultAmount="resultAmount" :parent-tree="$props" ></recipe-row>
+                <recipe-row :entry="entry" :resultAmount="resultAmount" :parent-amount="amount" :parent-data="$children"/>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-                <recipe-panels-tree :item="entry.item" :amount="resultAmount"
-                                    :parent-tree="$root.$data" :parent-index="this.index++"></recipe-panels-tree>
+                <recipe-panels-tree :item="entry.item" :amount="resultAmount"/>
             </v-expansion-panel-content>
         </v-expansion-panel>
     </v-expansion-panels>
@@ -19,10 +18,11 @@
     export default {
         name: "recipePanelsTree",
         components: {RecipeRow},
-        props: ['item', 'amount', 'parentTree', 'parentIndex'],
+        props: ['item', 'amount'],
         data() {
-            return{
-                index:0
+            return {
+                index: 0,
+                currRow:null
             }
         }
     }
