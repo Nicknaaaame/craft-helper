@@ -6,7 +6,7 @@
         <div v-else>
             <h1>Here's craft recipe of "{{item.name}}"</h1>
             <div>
-                <recipe-panels-tree :item="item" :amount="1"></recipe-panels-tree>
+                <recipe-panels-tree :item="item" :amount="1"/>
             </div>
         </div>
     </v-container>

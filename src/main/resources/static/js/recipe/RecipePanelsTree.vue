@@ -5,7 +5,7 @@
             <v-expansion-panel-header>
                 <recipe-row :entry="entry" :resultAmount="resultAmount" :parent-amount="amount" :parent-data="$children"/>
             </v-expansion-panel-header>
-            <v-expansion-panel-content>
+            <v-expansion-panel-content eager>
                 <recipe-panels-tree :item="entry.item" :amount="resultAmount"/>
             </v-expansion-panel-content>
         </v-expansion-panel>
