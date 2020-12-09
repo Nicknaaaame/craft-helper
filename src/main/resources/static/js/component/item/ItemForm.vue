@@ -1,41 +1,52 @@
 <template>
-    <v-app>
+    <v-app class="ma-10">
         <v-form>
-            <v-container>
-                <v-text-field
-                        v-model="name"
-                        :counter="10"
-                        label="Name"
-                        required
-                ></v-text-field>
-                <v-file-input
-                        v-model="icon"
-                        accept="image/*"
-                        label="Icon input"
-                ></v-file-input>
-                <v-card v-for="entry in recipe" :key="entry.item.id" class="my-2">
-                    <v-card-text>
-                        {{entry.item.name}}
-                    </v-card-text>
-                    <v-text-field
-                            hide-details
-                            type="number"
-                            v-model="entry.amount"
-                    />
-                </v-card>
-                <v-btn @click="submit">submit</v-btn>
-            </v-container>
-            <v-container>
-                <v-card v-for="item in items" :key="item.id" class="my-2">
-                    <v-card-text primary-title>
-                        {{ item.icon }}
-                        {{ item.name }}
-                    </v-card-text>
-                    <v-card-actions>
-                        <v-btn @click="addItem(item)">add</v-btn>
-                    </v-card-actions>
-                </v-card>
-            </v-container>
+            <v-row>
+                <v-col>
+                    <v-card>
+                        <v-container>
+                            <v-text-field
+                                    v-model="name"
+                                    :counter="10"
+                                    label="Name"
+                                    required
+                            ></v-text-field>
+                            <v-file-input
+                                    v-model="icon"
+                                    accept="image/*"
+                                    label="Icon input"
+                            ></v-file-input>
+                            <v-btn @click="submit">submit</v-btn>
+                            <v-card v-for="entry in recipe" :key="entry.item.id" class="ma-2">
+                                <v-card-text>
+                                    {{entry.item.name}}
+                                </v-card-text>
+                                <v-card-text class="d-inline-flex">
+                                    Amount: {{entry.amount}}
+                                    <v-btn :disabled="entry.amount>98" @click="entry.amount++">+</v-btn>
+                                    <v-btn :disabled="entry.amount===1" @click="entry.amount--">-</v-btn>
+                                    <v-layout justify-end>
+                                        <v-btn @click="removeItem(entry.item)">X</v-btn>
+                                    </v-layout>
+                                </v-card-text>
+                            </v-card>
+                        </v-container>
+                    </v-card>
+                </v-col>
+                <v-col>
+                    <v-container>
+                        <v-card v-for="item in items" :key="item.id" class="my-2">
+                            <v-card-text primary-title>
+                                {{ item.icon }}
+                                {{ item.name }}
+                            </v-card-text>
+                            <v-card-actions>
+                                <v-btn @click="addItem(item)">add</v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-container>
+                </v-col>
+            </v-row>
         </v-form>
     </v-app>
 </template>
@@ -68,6 +79,11 @@
                 let index = this.items.indexOf(_item)
                 this.items.splice(index, 1)
                 this.recipe.push({item: _item, amount: 1})
+            },
+            removeItem(_item){
+                let index = this.recipe.indexOf(_item)
+                this.recipe.splice(index, 1)
+                this.items.push(_item)
             }
         },
 
