@@ -14,6 +14,17 @@ export default {
     getItemById(id) {
         return AXIOS.get('/' + id)
     },
+    addItem(name, icon, recipe) {
+        let data = new FormData()
+        data.append("name", name)
+        data.append("icon", icon)
+        data.append("recipe", recipe)
+        return AXIOS.post('/', data);
+        // return AXIOS.post('/', itemUtil.getItemWith(name, icon, recipe));
+    },
+    deleteItem(id) {
+        return AXIOS.delete('/' + id)
+    },
     getItemsWithName(name) {
         const params = {
             "name": name
@@ -23,9 +34,12 @@ export default {
     getRecipeById(id) {
         return AXIOS.get('/recipe/' + id)
     },
-    addItem(name, icon, recipe) {
-        return AXIOS.post('/', itemUtil.getItemWith(name, icon, recipe));
-    },
+    sendIcon(icon) {
+        let data = new FormData()
+        data.append("icon", icon)
+        return AXIOS.post('/', data)
+    }
 }
+
 
 

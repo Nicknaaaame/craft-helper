@@ -7,7 +7,6 @@
                         <v-container>
                             <v-text-field
                                     v-model="name"
-                                    :counter="10"
                                     label="Name"
                                     required
                             ></v-text-field>
@@ -20,8 +19,10 @@
                             <v-card v-for="entry in recipe" :key="entry.item.id" class="ma-2">
                                 <v-card-text>
                                     {{entry.item.name}}
+                                    <v-img v-if="entry.item.icon" :src="`data:image/jpg;base64, ${entry.item.icon}`" height="65" width="65"/>
                                 </v-card-text>
                                 <v-card-text class="d-inline-flex">
+                                    <v-img v-if="entry.item.icon" :src="`data:image/jpg;base64, ${entry.item.icon}`" height="65" width="65"/>
                                     Amount: {{entry.amount}}
                                     <v-btn :disabled="entry.amount>98" @click="entry.amount++">+</v-btn>
                                     <v-btn :disabled="entry.amount===1" @click="entry.amount--">-</v-btn>
@@ -37,7 +38,7 @@
                     <v-container>
                         <v-card v-for="item in items" :key="item.id" class="my-2">
                             <v-card-text primary-title>
-                                {{ item.icon }}
+                                <v-img v-if="item.icon" :src="`data:image/jpg;base64, ${item.icon}`" height="65" width="65"/>
                                 {{ item.name }}
                             </v-card-text>
                             <v-card-actions>
@@ -72,21 +73,22 @@
                 this.recipe.forEach(entry => {
                     resultRecipe.push(itemUtil.getRecipeEntryWith(entry.item.id, entry.amount))
                 })
+                console.log(this.icon)
+                // api.sendIcon(this.icon)
                 api.addItem(this.name, this.icon, resultRecipe)
-                window.location.reload()
+                // window.location.reload()
             },
             addItem(_item) {
                 let index = this.items.indexOf(_item)
                 this.items.splice(index, 1)
                 this.recipe.push({item: _item, amount: 1})
             },
-            removeItem(_item){
+            removeItem(_item) {
                 let index = this.recipe.indexOf(_item)
                 this.recipe.splice(index, 1)
                 this.items.push(_item)
-            }
-        },
-
+            },
+        }
     }
 </script>
 

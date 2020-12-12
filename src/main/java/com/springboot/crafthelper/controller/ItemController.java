@@ -6,39 +6,52 @@ import com.springboot.crafthelper.domain.Item;
 import com.springboot.crafthelper.exception.ItemNotFoundException;
 import com.springboot.crafthelper.service.ItemService;
 import com.sun.istack.NotNull;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Data
+class TestDto {
+    private MultipartFile file;
+}
 
 @RestController
 @RequestMapping("/api/item")
 public class ItemController {
     @Autowired
-    @Qualifier("mockItemServiceImpl")
+    @Qualifier("itemServiceImpl")
     private ItemService itemService;
 
     @PostMapping
-    public ResponseEntity<HttpStatus> postItem(@NotNull @RequestBody ItemDto itemDto) {
+    public ResponseEntity<HttpStatus> postItem(@NotNull @ModelAttribute ItemDto itemDto) {
         Map<Item, Integer> craftRecipe = new HashMap<>();
-        itemDto.getCraftRecipe().forEach(recipeEntry -> {
-            Item item = itemService.getItemById(recipeEntry.getId())
-                    .orElseThrow(() -> new ItemNotFoundException("Recipe has nonexistent item with id: " + recipeEntry.getId()));
-            craftRecipe.put(item, recipeEntry.getAmount());
-        });
+        if (itemDto.getCraftRecipe() != null)
+            itemDto.getCraftRecipe().forEach(recipeEntry -> {
+                Item item = itemService.getItemById(recipeEntry.getId())
+                        .orElseThrow(() -> new ItemNotFoundException("Recipe has nonexistent item with id: " + recipeEntry.getId()));
+                craftRecipe.put(item, recipeEntry.getAmount());
+            });
 
-        Item item = new Item(
-                itemDto.getId(),
-                itemDto.getName(),
-                itemDto.getIcon(),
-                craftRecipe);
+        Item item = null;
+        try {
+            item = new Item(
+                    itemDto.getId(),
+                    itemDto.getName(),
+                    itemDto.getIcon().getBytes(),
+                    craftRecipe);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         itemService.saveItem(item);
         System.out.println(item);
         return new ResponseEntity<>(HttpStatus.OK);

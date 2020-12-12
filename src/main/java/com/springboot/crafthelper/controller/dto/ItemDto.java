@@ -1,6 +1,7 @@
 package com.springboot.crafthelper.controller.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public class ItemDto{
     private Long id;
     private String name;
-    private byte[] icon;
+    private MultipartFile icon;
     private List<CraftRecipeEntry> craftRecipe;
 }
 
