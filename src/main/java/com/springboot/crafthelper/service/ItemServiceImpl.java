@@ -55,4 +55,9 @@ public class ItemServiceImpl implements ItemService {
         itemRepository.findAll().forEach(result::add);
         return result;
     }
+
+    @Override
+    public void deleteItemById(Long id) {
+        itemRepository.deleteById(id);
+    }
 }

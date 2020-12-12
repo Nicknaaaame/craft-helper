@@ -55,4 +55,9 @@ public class MockItemServiceImpl implements ItemService {
     public List<Item> getAllItems() {
         return items;
     }
+
+    @Override
+    public void deleteItemById(Long id) {
+        throw new UnsupportedOperationException();
+    }
 }

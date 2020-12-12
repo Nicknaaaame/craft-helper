@@ -73,8 +73,6 @@
                 this.recipe.forEach(entry => {
                     resultRecipe.push(itemUtil.getRecipeEntryWith(entry.item.id, entry.amount))
                 })
-                console.log(this.icon)
-                // api.sendIcon(this.icon)
                 api.addItem(this.name, this.icon, resultRecipe)
                 // window.location.reload()
             },

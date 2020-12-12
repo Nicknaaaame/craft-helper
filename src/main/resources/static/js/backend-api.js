@@ -17,10 +17,16 @@ export default {
     addItem(name, icon, recipe) {
         let data = new FormData()
         data.append("name", name)
-        data.append("icon", icon)
-        data.append("recipe", recipe)
+        if (icon !== null)
+            data.append("icon", icon)
+
+        data.append("craftRecipe", JSON.stringify(recipe))
+        console.log({"recipe": recipe});
+        console.log({"recipe": JSON.stringify(recipe)});
         return AXIOS.post('/', data);
+        // console.log(itemUtil.getItemWith(name, icon, recipe))
         // return AXIOS.post('/', itemUtil.getItemWith(name, icon, recipe));
+        /*{headers:{"Content-type":"multipart/form-data"}}*/
     },
     deleteItem(id) {
         return AXIOS.delete('/' + id)

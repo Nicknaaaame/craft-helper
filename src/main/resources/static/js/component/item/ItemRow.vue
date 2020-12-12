@@ -7,7 +7,7 @@
         </v-card-text>
         <v-card-actions>
             <v-btn :to="`/item/${item.id}`">open</v-btn>
-            <v-btn>delete</v-btn>
+            <v-btn @click="del(item.id)">delete</v-btn>
         </v-card-actions>
     </v-card>
 </template>
@@ -17,7 +17,7 @@
     export default {
         props: ['item'],
         methods: {
-            delete(id) {
+            del(id) {
                 api.deleteItem(id)
             }
         }

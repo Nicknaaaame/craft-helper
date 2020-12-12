@@ -23,6 +23,7 @@ public class Item {
     private byte[] icon;
 
     @ElementCollection
+    @Column(name = "item_amount")
     @JsonSerialize(using = CraftRecipeSerializer.class)
     private Map<Item, Integer> craftRecipe = new HashMap<>();
 

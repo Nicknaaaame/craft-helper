@@ -12,4 +12,5 @@ public interface ItemService {
     Map<Item, Integer> getFullRecipe(Item item);
     Optional<Item> getItemByName(String name);
     List<Item> getAllItems();
+    void deleteItemById(Long id);
 }
