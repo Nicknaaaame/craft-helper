@@ -1,9 +1,5 @@
 package com.springboot.crafthelper.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.crafthelper.controller.dto.CraftRecipeEntry;
 import com.springboot.crafthelper.controller.dto.ItemAmountEntry;
 import com.springboot.crafthelper.controller.dto.ItemDto;
 import com.springboot.crafthelper.domain.Item;
@@ -16,8 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,11 +29,16 @@ public class ItemController {
                 .orElseThrow(() -> new ItemNotFoundException("Item with id: " + id + " not found"));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Item>> getItemsByName(@RequestParam(required = false, defaultValue = "") String name) {
-        return new ResponseEntity<>(itemService.getAllItems().stream()
-                .filter(item -> item.getName().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList()), HttpStatus.OK);
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HttpStatus> postItem(@ModelAttribute ItemDto itemDto) {
+        itemService.saveItem(itemService.createItemFrom(itemDto));
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<HttpStatus> updateItem(@ModelAttribute ItemDto itemDto) {
+        itemService.saveItem(itemService.createItemFrom(itemDto));
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
@@ -45,34 +46,13 @@ public class ItemController {
         itemService.deleteItemById(id);
     }
 
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> postItem(@ModelAttribute ItemDto itemDto) {
-        Map<Item, Integer> craftRecipe = new HashMap<>();
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<CraftRecipeEntry> recipeJson = new ArrayList<>();
-        try {
-            recipeJson = objectMapper.readValue(itemDto.getCraftRecipe(), new TypeReference<List<CraftRecipeEntry>>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Recipe has not been serialized");
-        }
-        recipeJson.forEach(recipeEntry -> {
-            Item item = itemService.getItemById(recipeEntry.getId())
-                    .orElseThrow(() -> new ItemNotFoundException("Recipe has nonexistent item with id: " + recipeEntry.getId()));
-            craftRecipe.put(item, recipeEntry.getAmount());
-        });
-        try {
-            Item item = new Item(
-                    itemDto.getId(),
-                    itemDto.getName(),
-                    itemDto.getIcon() == null ? null : itemDto.getIcon().getBytes(),
-                    craftRecipe);
-            itemService.saveItem(item);
-        } catch (IOException e) {
-            throw new RuntimeException("Icon has not been serialized", e);
-        }
-        return new ResponseEntity<>(HttpStatus.OK);
+    //--------unnecessary points
+
+    @GetMapping
+    public ResponseEntity<List<Item>> getItemsByName(@RequestParam(required = false, defaultValue = "") String name) {
+        return new ResponseEntity<>(itemService.getAllItems().stream()
+                .filter(item -> item.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("/recipe/{id}")

@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <item-form :items="items"></item-form>
+        <item-form v-if="item" :items="items" :item="item"></item-form>
     </v-container>
 </template>
 
@@ -12,12 +12,14 @@
         components: {ItemForm},
         data() {
             return {
+                item: null,
                 items: null
             }
         },
         async mounted() {
-            this.items = await api.getAllItems().then(response => response.data)
-
+            api.getAllItems().then(response => this.items = response.data)
+            let id = this.$route.params.id
+            this.item = await api.getItemById(id).then(response => response.data)
         }
     }
 </script>

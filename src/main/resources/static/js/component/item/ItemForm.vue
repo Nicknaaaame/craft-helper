@@ -16,20 +16,19 @@
                                     label="Icon input"
                             ></v-file-input>
                             <v-btn @click="submit">submit</v-btn>
-                            <v-card v-for="entry in recipe" :key="entry.item.id" class="ma-2">
-                                <v-card-text>
-                                    {{entry.item.name}}
-                                    <v-img v-if="entry.item.icon" :src="`data:image/jpg;base64, ${entry.item.icon}`" height="65" width="65"/>
-                                </v-card-text>
-                                <v-card-text class="d-inline-flex">
-                                    <v-img v-if="entry.item.icon" :src="`data:image/jpg;base64, ${entry.item.icon}`" height="65" width="65"/>
-                                    Amount: {{entry.amount}}
-                                    <v-btn :disabled="entry.amount>98" @click="entry.amount++">+</v-btn>
-                                    <v-btn :disabled="entry.amount===1" @click="entry.amount--">-</v-btn>
-                                    <v-layout justify-end>
-                                        <v-btn @click="removeItem(entry.item)">X</v-btn>
-                                    </v-layout>
-                                </v-card-text>
+                            <v-card v-for="entry in recipe" :key="entry.item.id">
+                                <item-row :item="entry.item">
+                                    <template v-slot:content>
+                                        <v-card-text class="d-inline-flex">
+                                            Amount: {{entry.amount}}
+                                            <v-btn :disabled="entry.amount>98" @click="entry.amount++">+</v-btn>
+                                            <v-btn :disabled="entry.amount===1" @click="entry.amount--">-</v-btn>
+                                            <v-layout justify-end>
+                                                <v-btn @click="removeItem(entry.item)">X</v-btn>
+                                            </v-layout>
+                                        </v-card-text>
+                                    </template>
+                                </item-row>
                             </v-card>
                         </v-container>
                     </v-card>
@@ -37,13 +36,11 @@
                 <v-col>
                     <v-container>
                         <v-card v-for="item in items" :key="item.id" class="my-2">
-                            <v-card-text primary-title>
-                                <v-img v-if="item.icon" :src="`data:image/jpg;base64, ${item.icon}`" height="65" width="65"/>
-                                {{ item.name }}
-                            </v-card-text>
-                            <v-card-actions>
-                                <v-btn @click="addItem(item)">add</v-btn>
-                            </v-card-actions>
+                            <item-row :item="item">
+                                <template v-slot:actions>
+                                    <v-btn @click="addItem({item:item, amount:1})">add</v-btn>
+                                </template>
+                            </item-row>
                         </v-card>
                     </v-container>
                 </v-col>
@@ -56,15 +53,19 @@
     import api from "backend-api"
     import ItemList from "./ItemList";
     import itemUtil from "util/item"
+    import ItemRow from "./ItemRow";
+    import item from "util/item";
 
     export default {
-        components: {ItemList},
-        props: ["items"],
+        components: {ItemRow, ItemList},
+        props: ["items", "item"],
         data() {
             return {
+                id: null,
                 name: "",
                 icon: null,
                 recipe: [],
+                iconBase64: null
             }
         },
         methods: {
@@ -73,19 +74,33 @@
                 this.recipe.forEach(entry => {
                     resultRecipe.push(itemUtil.getRecipeEntryWith(entry.item.id, entry.amount))
                 })
-                api.addItem(this.name, this.icon, resultRecipe)
+                api.saveItem(this.id, this.name, this.icon, resultRecipe)
                 // window.location.reload()
             },
-            addItem(_item) {
-                let index = this.items.indexOf(_item)
+            addItem(entry) {
+                let index = this.items.findIndex(el => el.id === entry.item.id)
+                console.log(index)
                 this.items.splice(index, 1)
-                this.recipe.push({item: _item, amount: 1})
+                this.recipe.push({item: entry.item, amount: entry.amount})
             },
             removeItem(_item) {
-                let index = this.recipe.indexOf(_item)
+                let index = this.recipe.findIndex(el => el.item.id === _item.id)
                 this.recipe.splice(index, 1)
                 this.items.push(_item)
             },
+        },
+        mounted() {
+            if (this.item) {
+                this.id = this.item.id
+                this.name = this.item.name
+                // this.icon = this.item.icon
+                this.iconBase64 = 'data:image/png;base64, ' + this.item.icon
+                // let tmp = this.icon
+                // this.icon = new Image()
+                // this.icon.src = 'data:image/png;base64, ' + tmp
+                this.item.craftRecipe.forEach(entry => this.addItem(entry))
+                this.items.splice(this.items.findIndex(x => x.id === this.id), 1)
+            }
         }
     }
 </script>

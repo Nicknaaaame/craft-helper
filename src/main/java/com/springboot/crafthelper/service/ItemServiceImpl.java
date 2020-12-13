@@ -1,10 +1,17 @@
 package com.springboot.crafthelper.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.springboot.crafthelper.controller.dto.CraftRecipeEntry;
+import com.springboot.crafthelper.controller.dto.ItemDto;
 import com.springboot.crafthelper.domain.Item;
+import com.springboot.crafthelper.exception.ItemNotFoundException;
 import com.springboot.crafthelper.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -59,5 +66,38 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deleteItemById(Long id) {
         itemRepository.deleteById(id);
+    }
+
+    @Override
+    public Item createItemFrom(ItemDto itemDto) {
+        try {
+            return new Item(
+                    itemDto.getId(),
+                    itemDto.getName(),
+                    itemDto.getIcon() == null ? null : itemDto.getIcon().getBytes(),
+                    createCraftRecipeFrom(createRecipeEntriesFromJson(itemDto.getCraftRecipe())));
+        } catch (IOException e) {
+            throw new RuntimeException("Recipe has not been serialized", e);
+        }
+    }
+
+    private List<CraftRecipeEntry> createRecipeEntriesFromJson(String craftRecipeJson) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            return objectMapper.readValue(craftRecipeJson, new TypeReference<>() {
+            });
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Recipe has not been serialized", e);
+        }
+    }
+
+    private Map<Item, Integer> createCraftRecipeFrom(List<CraftRecipeEntry> craftRecipeEntries) {
+        Map<Item, Integer> craftRecipe = new HashMap<>();
+        craftRecipeEntries.forEach(recipeEntry -> {
+            Item item = this.getItemById(recipeEntry.getId())
+                    .orElseThrow(() -> new ItemNotFoundException("Recipe has nonexistent item with id: " + recipeEntry.getId()));
+            craftRecipe.put(item, recipeEntry.getAmount());
+        });
+        return craftRecipe;
     }
 }
