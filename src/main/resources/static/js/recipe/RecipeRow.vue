@@ -3,7 +3,7 @@
         <v-card @click.native.stop flat class="d-inline pa-2" tile>
             <v-checkbox :value="isFullAmount" class="d-inline-flex"
                         @change="isFullAmount?currAmount=0:currAmount=resultAmount"/>
-            {{ entry.item.icon }}
+            <v-img v-if="entry.item.icon" :src="`data:image/jpg;base64, ${entry.item.icon}`" height="65" width="65"/>
             {{ entry.item.name }}
             {{currAmount}}/
             {{resultAmount}}

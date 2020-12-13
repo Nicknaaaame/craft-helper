@@ -93,7 +93,7 @@
             if (this.item) {
                 this.id = this.item.id
                 this.name = this.item.name
-                // this.icon = this.item.icon
+                this.icon = this.item.icon
                 this.iconBase64 = 'data:image/png;base64, ' + this.item.icon
                 // let tmp = this.icon
                 // this.icon = new Image()
