@@ -9,6 +9,7 @@
                                     v-model="name"
                                     label="Name"
                                     required
+                                    :rules="rules.name"
                             ></v-text-field>
                             <v-file-input
                                     v-model="icon"
@@ -65,7 +66,10 @@
                 name: "",
                 icon: null,
                 recipe: [],
-                iconBase64: null
+                iconBase64: null,
+                rules: {
+                    name: [val => (val || '').length > 0 || 'This field is required'],
+                },
             }
         },
         methods: {
@@ -93,8 +97,16 @@
             if (this.item) {
                 this.id = this.item.id
                 this.name = this.item.name
-                this.icon = this.item.icon
-                this.iconBase64 = 'data:image/png;base64, ' + this.item.icon
+                // this.icon = this.item.icon
+                if (this.item.icon) {
+                    this.iconBase64 = 'data:image/png;base64, ' + this.item.icon
+                    fetch(this.iconBase64)
+                        .then(res => res.blob())
+                        .then(blob => {
+                            this.icon = new File([blob], "icon", {type: "image/png"});
+                            console.log(this.icon)
+                        })
+                }
                 // let tmp = this.icon
                 // this.icon = new Image()
                 // this.icon.src = 'data:image/png;base64, ' + tmp

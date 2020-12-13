@@ -1,6 +1,5 @@
 package com.springboot.crafthelper.controller;
 
-import com.springboot.crafthelper.controller.dto.ItemAmountEntry;
 import com.springboot.crafthelper.controller.dto.ItemDto;
 import com.springboot.crafthelper.domain.Item;
 import com.springboot.crafthelper.exception.ItemNotFoundException;
@@ -11,10 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/item")
@@ -46,9 +41,13 @@ public class ItemController {
         itemService.deleteItemById(id);
     }
 
-    //--------unnecessary points
+    @ExceptionHandler({ItemNotFoundException.class})
+    public ResponseEntity<ErrorResponse> itemNotFoundHandler(ItemNotFoundException ex) {
+        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), ""), HttpStatus.BAD_REQUEST);
+    }
 
-    @GetMapping
+    //--------unnecessary points
+    /*@GetMapping
     public ResponseEntity<List<Item>> getItemsByName(@RequestParam(required = false, defaultValue = "") String name) {
         return new ResponseEntity<>(itemService.getAllItems().stream()
                 .filter(item -> item.getName().toLowerCase().contains(name.toLowerCase()))
@@ -68,12 +67,7 @@ public class ItemController {
         Item item = getItemById(id).getBody();
         Map<Item, Integer> fullRecipe = itemService.getFullRecipe(item);
         return new ResponseEntity<>(fullRecipe, HttpStatus.OK);
-    }
-
-    @ExceptionHandler({ItemNotFoundException.class})
-    public ResponseEntity<ErrorResponse> itemNotFoundHandler(ItemNotFoundException ex) {
-        return new ResponseEntity<>(new ErrorResponse(ex.getMessage(), ""), HttpStatus.BAD_REQUEST);
-    }
+    }*/
 
 //    @ExceptionHandler({RuntimeException.class})
 //    public ResponseEntity<ErrorResponse> runtimeExceptionHandler(RuntimeException ex) {
