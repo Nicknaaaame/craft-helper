@@ -11,12 +11,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/item")
 public class ItemController {
     @Autowired
     @Qualifier("itemServiceImpl")
     private ItemService itemService;
+
+    @GetMapping
+    public ResponseEntity<List<Item>> getAllItems() {
+        return new ResponseEntity<>(itemService.getAllItems(), HttpStatus.OK);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Item> getItemById(@PathVariable Long id) {
@@ -47,12 +54,7 @@ public class ItemController {
     }
 
     //--------unnecessary points
-    /*@GetMapping
-    public ResponseEntity<List<Item>> getItemsByName(@RequestParam(required = false, defaultValue = "") String name) {
-        return new ResponseEntity<>(itemService.getAllItems().stream()
-                .filter(item -> item.getName().toLowerCase().contains(name.toLowerCase()))
-                .collect(Collectors.toList()), HttpStatus.OK);
-    }
+    /*
 
     @GetMapping("/recipe/{id}")
     public ResponseEntity<List<ItemAmountEntry>> getCraftRecipe(@PathVariable Long id) {
