@@ -17,6 +17,7 @@
                                     label="Icon input"
                             ></v-file-input>
                             <v-btn @click="submit">submit</v-btn>
+                            <v-alert :type="alert.type" v-model="alert.value" dismissible class="mt-2">{{alert.text}}</v-alert>
                             <v-card v-for="entry in recipe" :key="entry.item.id">
                                 <item-row :item="entry.item">
                                     <template v-slot:content>
@@ -70,6 +71,11 @@
                 rules: {
                     name: [val => (val || '').length > 0 || 'This field is required'],
                 },
+                alert:{
+                    value: false,
+                    type: "error",
+                    text: "KEK"
+                }
             }
         },
         methods: {
@@ -78,7 +84,21 @@
                 this.recipe.forEach(entry => {
                     resultRecipe.push(itemUtil.getRecipeEntryWith(entry.item.id, entry.amount))
                 })
-                api.saveItem(this.id, this.name, this.icon, resultRecipe)
+                api.saveItem(this.id, this.name, this.icon, resultRecipe).then(response=>{
+                    this.alert.type = "success"
+                    this.alert.text = "Success"
+                    this.alert.value = true;
+                    window.setInterval(() => {
+                        this.alert.value = false;
+                    }, 2000)
+                }).catch(err=>{
+                    this.alert.type = "error"
+                    this.alert.text = "Error"
+                    this.alert.value = true;
+                    /*window.setInterval(() => {
+                        this.alert.value = false;
+                    }, 2000)*/
+                })
                 // window.location.reload()
             },
             addItem(entry) {
