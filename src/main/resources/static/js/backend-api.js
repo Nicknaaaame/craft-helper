@@ -14,7 +14,19 @@ export default {
     getItemById(id) {
         return AXIOS.get('/' + id)
     },
-    saveItem(id, name, icon, recipe) {
+    saveItem(item) {
+        let data = new FormData()
+        if (item.id !== null)
+            data.append("id", item.id)
+        data.append("name", item.name)
+        if (item.icon !== null)
+            data.append("icon", item.icon)
+        data.append("craftRecipe", JSON.stringify(item.craftRecipe))
+        if (item.id !== null)
+            return AXIOS.put('/', data);
+        return AXIOS.post('/', data);
+    },
+    saveItemBy(id, name, icon, recipe) {
         let data = new FormData()
         if (id !== null)
             data.append("id", id)

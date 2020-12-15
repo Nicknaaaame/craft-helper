@@ -33,12 +33,13 @@
                 menuItems: [
                     {title: 'Home', path: '/', icon: 'home'},
                     {title: 'Add item', path: '/additem', icon: 'face'},
-                    // {title: 'Sign Up', path: '/signup', icon: 'face'},
-                    // {title: 'Sign In', path: '/signin', icon: 'lock_open'}
                 ]
             }
         },
-    };
+        beforeCreate() {
+            this.$store.dispatch('initState')
+        }
+    }
 </script>
 
 <style>

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ItemService {
-    void saveItem(Item item);
+    Item saveItem(Item item);
 
     Optional<Item> getItemById(Long id);
 

@@ -15,8 +15,9 @@ public class MockItemServiceImpl implements ItemService {
     }
 
     @Override
-    public void saveItem(Item item) {
+    public Item saveItem(Item item) {
         items.add(item);
+        return item;
     }
 
     @Override

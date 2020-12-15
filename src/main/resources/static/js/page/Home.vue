@@ -6,12 +6,14 @@
                     v-model="searchName"
                     @change="findItem"
             ></v-text-field>
-            <item-list :items="foundedItems"></item-list>
+            <!--TODO: change it to founded items namely sync getItems and foundedItems-->
+            <item-list :items="getItems"></item-list>
         </v-container>
     </v-app>
 </template>
 
 <script>
+    import {mapGetters, mapActions} from 'vuex'
     import ItemList from "component/item/ItemList";
     import api from "../backend-api";
 
@@ -19,29 +21,25 @@
         components: {ItemList},
         data() {
             return {
-                items: null,
-                foundedItems:null,
-                searchName:""
+                foundedItems: this.getItems,
+                searchName: "",
             }
         },
+        computed: mapGetters(['getItems']),
         methods: {
             findItem() {
                 console.log(this.foundedItems)
-                if(this.searchName!==""){
+                if (this.searchName !== "") {
                     this.foundedItems = []
-                    this.items.forEach(item=>{
-                        if(item.name.toLowerCase().includes(this.searchName.toLowerCase()))
+                    this.getItems.forEach(item => {
+                        if (item.name.toLowerCase().includes(this.searchName.toLowerCase()))
                             this.foundedItems.push(item)
                     })
-                } else
-                    this.foundedItems = this.items
+                } else{
+
+                    this.foundedItems = this.getItems
+                }
             }
-        },
-        mounted() {
-            api.getAllItems().then(response => {
-                this.items = response.data
-                this.foundedItems = this.items
-            })
         },
     }
 </script>

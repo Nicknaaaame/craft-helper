@@ -32,15 +32,16 @@ public class ItemController {
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> postItem(@ModelAttribute ItemDto itemDto) {
-        itemService.saveItem(itemService.createItemFrom(itemDto));
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Item> postItem(@ModelAttribute ItemDto itemDto) {
+        Item item = itemService.saveItem(itemService.createItemFrom(itemDto));
+        return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
+    //TODO: change this to true REST
     @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<HttpStatus> updateItem(@ModelAttribute ItemDto itemDto) {
-        itemService.saveItem(itemService.createItemFrom(itemDto));
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Item> updateItem(@ModelAttribute ItemDto itemDto) {
+        Item item = itemService.saveItem(itemService.createItemFrom(itemDto));
+        return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

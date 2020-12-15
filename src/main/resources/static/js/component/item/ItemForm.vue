@@ -84,7 +84,7 @@
                 this.recipe.forEach(entry => {
                     resultRecipe.push(itemUtil.getRecipeEntryWith(entry.item.id, entry.amount))
                 })
-                api.saveItem(this.id, this.name, this.icon, resultRecipe).then(response=>{
+                api.saveItemBy(this.id, this.name, this.icon, resultRecipe).then(response=>{
                     this.alert.type = "success"
                     this.alert.text = "Success"
                     this.alert.value = true;
