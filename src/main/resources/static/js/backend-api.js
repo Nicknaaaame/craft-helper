@@ -14,48 +14,26 @@ export default {
     getItemById(id) {
         return AXIOS.get('/' + id)
     },
-    saveItem(item) {
+    updateItem(item) {
         let data = new FormData()
-        if (item.id !== null)
-            data.append("id", item.id)
+        data.append("id", item.id)
         data.append("name", item.name)
         if (item.icon !== null)
             data.append("icon", item.icon)
         data.append("craftRecipe", JSON.stringify(item.craftRecipe))
-        if (item.id !== null)
-            return AXIOS.put('/', data);
-        return AXIOS.post('/', data);
+        return AXIOS.put('/', data);
     },
-    saveItemBy(id, name, icon, recipe) {
+    saveItem(item) {
         let data = new FormData()
-        if (id !== null)
-            data.append("id", id)
-        data.append("name", name)
-        if (icon !== null)
-            data.append("icon", icon)
-        data.append("craftRecipe", JSON.stringify(recipe))
-        if (id !== null)
-            return AXIOS.put('/', data);
+        data.append("name", item.name)
+        if (item.icon !== null)
+            data.append("icon", item.icon)
+        data.append("craftRecipe", JSON.stringify(item.craftRecipe))
         return AXIOS.post('/', data);
-        /*{headers:{"Content-type":"multipart/form-data"}}*/
     },
     deleteItem(id) {
         return AXIOS.delete('/' + id)
     },
-    getItemsWithName(name) {
-        const params = {
-            "name": name
-        }
-        return AXIOS.get(`/`, {params})
-    },
-    getRecipeById(id) {
-        return AXIOS.get('/recipe/' + id)
-    },
-    sendIcon(icon) {
-        let data = new FormData()
-        data.append("icon", icon)
-        return AXIOS.post('/', data)
-    }
 }
 
 

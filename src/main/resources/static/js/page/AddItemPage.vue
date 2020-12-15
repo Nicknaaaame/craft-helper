@@ -1,23 +1,16 @@
 <template>
     <v-container>
-        <item-form :items="items"></item-form>
+        <item-form :items="getItems"></item-form>
     </v-container>
 </template>
 
 <script>
     import ItemForm from "../component/item/ItemForm";
     import api from "../backend-api";
+    import {mapGetters} from "vuex";
 
     export default {
         components: {ItemForm},
-        data() {
-            return {
-                items: null
-            }
-        },
-        async mounted() {
-            this.items = await api.getAllItems().then(response => response.data)
-
-        }
+        computed: mapGetters(['getItems']),
     }
 </script>

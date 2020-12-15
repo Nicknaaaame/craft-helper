@@ -20,24 +20,46 @@ export default new Vuex.Store({
             ]
         },
         updateItemMutation(state, item) {
-            const updateIndex = state.messages.findIndex(el => el.id === item.id)
+            const updateIndex = state.items.findIndex(el => el.id === item.id)
             state.items = [
                 ...state.items.slice(0, updateIndex),
                 item,
                 ...state.items.slice(updateIndex + 1)
             ]
         },
+        deleteItemMutation(state, id) {
+            const deletionIndex = state.items.findIndex(el => el.id === id)
+
+            if (deletionIndex > -1) {
+                state.items = [
+                    ...state.items.slice(0, deletionIndex),
+                    ...state.items.slice(deletionIndex + 1)
+                ]
+            }
+        },
     },
     actions: {
         async addItemAction({commit}, item) {
             const result = await api.saveItem(item)
-            commit('addMessageMutation', result.data)
+            commit('addItemMutation', result.data)
+            return result
         },
+        async updateItemAction({commit}, item) {
+            const result = await api.updateItem(item)
+            commit('updateItemMutation', result.data)
+            return result
+        },
+        async deleteItemAction({commit}, id) {
+            const result = await api.deleteItem(id)
+            if (result.status === 200) {
+                commit('deleteItemMutation', id)
+            }
+            return result
+        },
+
         async initState({state}) {
             const result = await api.getAllItems()
-            console.log(result)
             state.items = result.data
-            console.log(state)
         }
     }
 })

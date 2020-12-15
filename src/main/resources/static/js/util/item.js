@@ -1,7 +1,7 @@
 export default {
-    getItemWith(name, icon, recipe) {
+    getItemWith(id, name, icon, recipe) {
         return {
-            "id": null,
+            "id": id,
             "name": name,
             "icon": icon,
             "craftRecipe": recipe,

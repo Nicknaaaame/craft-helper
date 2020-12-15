@@ -1,23 +1,23 @@
 <template>
     <v-container>
-        <item-form v-if="item && items" :items="items" :item="item"></item-form>
+        <item-form v-if="item" :items="getItems" :item="item"></item-form>
     </v-container>
 </template>
 
 <script>
     import ItemForm from "../component/item/ItemForm";
     import api from "../backend-api";
+    import {mapGetters} from "vuex"
 
     export default {
         components: {ItemForm},
         data() {
             return {
                 item: null,
-                items: null
             }
         },
+        computed: mapGetters(['getItems']),
         async mounted() {
-            api.getAllItems().then(response => this.items = response.data)
             let id = this.$route.params.id
             this.item = await api.getItemById(id).then(response => response.data)
         }

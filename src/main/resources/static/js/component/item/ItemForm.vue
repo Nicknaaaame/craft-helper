@@ -17,7 +17,8 @@
                                     label="Icon input"
                             ></v-file-input>
                             <v-btn @click="submit">submit</v-btn>
-                            <v-alert :type="alert.type" v-model="alert.value" dismissible class="mt-2">{{alert.text}}</v-alert>
+                            <v-alert :type="alert.type" v-model="alert.value" dismissible class="mt-2">{{alert.text}}
+                            </v-alert>
                             <v-card v-for="entry in recipe" :key="entry.item.id">
                                 <item-row :item="entry.item">
                                     <template v-slot:content>
@@ -52,11 +53,11 @@
 </template>
 
 <script>
-    import api from "backend-api"
     import ItemList from "./ItemList";
     import itemUtil from "util/item"
     import ItemRow from "./ItemRow";
     import item from "util/item";
+    import {mapActions} from "vuex"
 
     export default {
         components: {ItemRow, ItemList},
@@ -71,7 +72,7 @@
                 rules: {
                     name: [val => (val || '').length > 0 || 'This field is required'],
                 },
-                alert:{
+                alert: {
                     value: false,
                     type: "error",
                     text: "KEK"
@@ -79,27 +80,34 @@
             }
         },
         methods: {
-            submit() {
+            ...mapActions(['addItemAction', 'updateItemAction']),
+            async submit() {
                 let resultRecipe = []
                 this.recipe.forEach(entry => {
                     resultRecipe.push(itemUtil.getRecipeEntryWith(entry.item.id, entry.amount))
                 })
-                api.saveItemBy(this.id, this.name, this.icon, resultRecipe).then(response=>{
+                let newItem = itemUtil.getItemWith(this.id, this.name, this.icon, resultRecipe)
+                let result
+                if (this.id === null)
+                    result = await this.addItemAction(newItem)
+                else
+                    result = await this.updateItemAction(newItem)
+                console.log(result)
+                this.updateAlert(result)
+            },
+            updateAlert(result) {
+                if (result.status === 200) {
                     this.alert.type = "success"
                     this.alert.text = "Success"
                     this.alert.value = true;
                     window.setInterval(() => {
                         this.alert.value = false;
                     }, 2000)
-                }).catch(err=>{
+                } else {
                     this.alert.type = "error"
                     this.alert.text = "Error"
                     this.alert.value = true;
-                    /*window.setInterval(() => {
-                        this.alert.value = false;
-                    }, 2000)*/
-                })
-                // window.location.reload()
+                }
             },
             addItem(entry) {
                 let index = this.items.findIndex(el => el.id === entry.item.id)
@@ -117,21 +125,16 @@
             if (this.item) {
                 this.id = this.item.id
                 this.name = this.item.name
-                // this.icon = this.item.icon
                 if (this.item.icon) {
                     this.iconBase64 = 'data:image/png;base64, ' + this.item.icon
                     fetch(this.iconBase64)
                         .then(res => res.blob())
                         .then(blob => {
                             this.icon = new File([blob], "icon", {type: "image/png"});
-                            console.log(this.icon)
                         })
                 }
-                // let tmp = this.icon
-                // this.icon = new Image()
-                // this.icon.src = 'data:image/png;base64, ' + tmp
                 this.item.craftRecipe.forEach(entry => this.addItem(entry))
-                this.items.splice(this.items.findIndex(x => x.id === this.id), 1)
+                this.items.splice(this.items.findIndex(el => el.id === this.id), 1)
             }
         }
     }
