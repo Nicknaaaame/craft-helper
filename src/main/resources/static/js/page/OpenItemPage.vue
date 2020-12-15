@@ -4,12 +4,11 @@
     </v-container>
 </template>
 <script>
-    import ItemList from "../component/item/ItemList";
     import api from "backend-api"
     import RecipeList from "../recipe/RecipeList";
 
     export default {
-        components: {RecipeList, ItemList},
+        components: {RecipeList},
         data() {
             return {
                 item: null,

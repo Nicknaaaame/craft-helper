@@ -6,7 +6,7 @@
             <slot name="text"/>
         </v-card-text>
         <v-card-actions>
-            <slot name="actions"/>
+            <slot v-bind:item="item" name="actions"/>
         </v-card-actions>
         <slot name="content"/>
     </v-card>
@@ -15,7 +15,6 @@
 <script>
     export default {
         props: ['item'],
-
     }
 </script>
 

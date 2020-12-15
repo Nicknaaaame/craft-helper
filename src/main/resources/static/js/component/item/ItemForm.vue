@@ -38,13 +38,11 @@
                 </v-col>
                 <v-col>
                     <v-container>
-                        <v-card v-for="item in items" :key="item.id" class="my-2">
-                            <item-row :item="item">
-                                <template v-slot:actions>
-                                    <v-btn @click="addItem({item:item, amount:1})">add</v-btn>
-                                </template>
-                            </item-row>
-                        </v-card>
+                        <finder-item-list :items="items">
+                            <template v-slot:actions="props">
+                                <v-btn @click="addItem({item:props.item, amount:1})">add</v-btn>
+                            </template>
+                        </finder-item-list>
                     </v-container>
                 </v-col>
             </v-row>
@@ -53,14 +51,14 @@
 </template>
 
 <script>
-    import ItemList from "./ItemList";
     import itemUtil from "util/item"
     import ItemRow from "./ItemRow";
     import item from "util/item";
     import {mapActions} from "vuex"
+    import FinderItemList from "./ItemList";
 
     export default {
-        components: {ItemRow, ItemList},
+        components: {FinderItemList, ItemRow},
         props: ["items", "item"],
         data() {
             return {
