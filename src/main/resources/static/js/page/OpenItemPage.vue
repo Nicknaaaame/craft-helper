@@ -1,22 +1,20 @@
 <template>
     <v-container>
-        <recipe-list v-if="item" :item="item"></recipe-list>
+        <recipe-list :item="getItemById(id)"/>
     </v-container>
 </template>
 <script>
-    import api from "backend-api"
+    import {mapGetters} from "vuex"
     import RecipeList from "../recipe/RecipeList";
 
     export default {
         components: {RecipeList},
+        computed: mapGetters(['getItemById']),
         data() {
             return {
                 item: null,
                 id: this.$route.params.id
             }
         },
-        async beforeMount() {
-            this.item = await api.getItemById(this.id).then(response => response.data)
-        }
     }
 </script>

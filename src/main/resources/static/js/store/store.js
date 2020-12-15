@@ -9,7 +9,8 @@ export default new Vuex.Store({
         items: []
     },
     getters: {
-        getItems: state => state.items
+        getItems: state => state.items,
+        getItemById: state => id => state.items.find(el => el.id === parseInt(id))
     },
 
     mutations: {

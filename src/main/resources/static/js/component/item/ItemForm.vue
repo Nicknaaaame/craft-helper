@@ -54,14 +54,15 @@
     import itemUtil from "util/item"
     import ItemRow from "./ItemRow";
     import item from "util/item";
-    import {mapActions} from "vuex"
+    import {mapActions, mapGetters} from "vuex"
     import FinderItemList from "./ItemList";
 
     export default {
         components: {FinderItemList, ItemRow},
-        props: ["items", "item"],
+        props: ["item"],
         data() {
             return {
+                items: [],
                 id: null,
                 name: "",
                 icon: null,
@@ -76,6 +77,9 @@
                     text: "KEK"
                 }
             }
+        },
+        computed: {
+            ...mapGetters(['getItems']),
         },
         methods: {
             ...mapActions(['addItemAction', 'updateItemAction']),
@@ -107,6 +111,7 @@
                     this.alert.value = true;
                 }
             },
+            //TODO: problem: this.items have reference on store state through getters so if items would splice original state changes
             addItem(entry) {
                 let index = this.items.findIndex(el => el.id === entry.item.id)
                 console.log(index)
@@ -120,6 +125,7 @@
             },
         },
         mounted() {
+            // this.items = getItems
             if (this.item) {
                 this.id = this.item.id
                 this.name = this.item.name

@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <item-form :items="getItems"></item-form>
+        <item-form/>
     </v-container>
 </template>
 
