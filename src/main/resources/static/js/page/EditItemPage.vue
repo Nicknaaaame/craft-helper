@@ -1,6 +1,6 @@
 <template>
     <v-container>
-        <item-form v-if="item" :item="item"/>
+        <item-form v-if="item" :item="item" :items="getItems"/>
     </v-container>
 </template>
 
